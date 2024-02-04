@@ -25,41 +25,41 @@ class StockGUI:
 
         # Add Label Widgets to mainframe
         ttk.Label(self.mainframe, text="Symbol").grid(column=0,row=0, sticky='w')
-        col2wdt = 14
+        col2wdt = 10
         # Add Entry Widget for Entering the Stock Symbol
         self.symbol = tk.StringVar()
-        self.symbol_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.symbol, font=("Arial", 20, "bold"))
+        self.symbol_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.symbol, font=("Arial", 15, "bold"))
         self.symbol_entry.grid(column=1, row=0, sticky=('w', 'e'))
 
         # Add Entry Widget for Entering the Closing Price
         ttk.Label(self.mainframe, text="Close Price").grid(column=0,row=1, sticky='w')
         self.close_price = tk.StringVar()
-        self.close_price_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.close_price, font=("Arial", 20, "bold"))
+        self.close_price_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.close_price, font=("Arial", 12, "bold"))
         self.close_price_entry.grid(column=1, row=1, sticky=('w', 'e'))
 
         # Add Entry Widget for Entering the Previous Close
         ttk.Label(self.mainframe, text="Previous Close").grid(column=0,row=2, sticky='w')
         self.p_close_price = tk.StringVar()
-        self.p_close_price_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.p_close_price, font=("Arial", 20, "bold"))
+        self.p_close_price_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.p_close_price, font=("Arial", 12, "bold"))
         self.p_close_price_entry.grid(column=1, row=2, sticky=('w', 'e'))
 
         # Add Entry Widget for Entering the Percent Change
         ttk.Label(self.mainframe, text="Percent Change").grid(column=0,row=3, sticky='w')
         self.change = tk.StringVar()
-        self.change_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.change, font=("Arial", 20, "bold"))
+        self.change_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.change, font=("Arial", 12, "bold"))
         self.change_entry.grid(column=1, row=3, sticky=('w', 'e'))
 
         # Add Entry Widget for Entering the Volume
 
         ttk.Label(self.mainframe, text="Volume").grid(column=0,row=4, sticky='w')
         self.vol = tk.StringVar()
-        self.vol_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.vol, font=("Arial", 20, "bold"))
+        self.vol_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.vol, font=("Arial", 12, "bold"))
         self.vol_entry.grid(column=1, row=4, sticky=('w', 'e'))
 
 
         # Add Button Widget for Calling stock_close() to Display Quote 
-        ttk.Button(self.mainframe, text="Price", cursor="hand2", width=10, command=self.stock_close).grid(column=1, row=5, sticky='w')
-        
+        ttk.Button(self.mainframe, text="Price", cursor="hand2", width=8, command=self.stock_close).grid(column=1, row=5, sticky=('w','e'))
+
         ttk.Separator(self.mainframe, orient='horizontal').\
                              grid(column=0, row=6, columnspan=4, sticky="EW")
  
@@ -70,6 +70,25 @@ class StockGUI:
                                   variable=self.ac, command=self.plt_ac, 
                                   onvalue=1, offvalue=0). \
                                   grid(column=1, row=7, sticky='w')
+
+
+
+        self.c = tk.IntVar()
+        self.c.set(0)
+        self.c1 = ttk.Checkbutton(self.mainframe, text="Closing Price",
+                                  variable=self.c, command=self.plt_close,
+                                  onvalue=1, offvalue=0). \
+                                  grid(column=2, row=7, sticky='w')
+
+        self.v = tk.IntVar()
+        self.v.set(0)
+        self.v1 = ttk.Checkbutton(self.mainframe, text="Volume",
+                                  variable=self.v, command=self.plt_vol,
+                                  onvalue=1, offvalue=0). \
+                                  grid(column=3, row=7, sticky='w')
+
+
+
 
         self.imgwin = ttk.Label(self.mainframe, image="").grid(column=0, 
                                             row=8, columnspan=4, sticky='w')
@@ -139,6 +158,9 @@ class StockGUI:
     def stock_close(self):
         self.stock_clear()
         self.stock_stat()
+        if self.symbol != "":
+            self.clear_price_button()
+
     """ Obtain New Stock Data from Alpha Vantage, Requires an API Key """ 
     """ After Obtaining New Data, Update 4 GUI Entry Boxes            """ 
     def stock_stat(self) : 
@@ -191,6 +213,16 @@ class StockGUI:
             self.clear_entries()
             
     """ Clear All 5 GUI Entry Boxes and Any Existing Graph """ 
+
+
+    def clear_price_button(self):
+        self.ac.set(0)
+        self.c.set(0)
+        self.v.set(0)
+        self.imgwin = ttk.Label(self.mainframe, text="").\
+                           grid(column=0, row=4, columnspan=8, sticky='w')
+        self.imgobj = None
+
     def clear_entries(self):
         self.stock_clear()
         self.symbol.set("")
@@ -198,10 +230,14 @@ class StockGUI:
         self.p_close_price.set("")
         self.change.set("")
         self.vol.set("")
+        self.ac.set(0)
+        self.c.set(0)
+        self.v.set(0)
         self.imgwin = ttk.Label(self.mainframe, text="").\
                            grid(column=0, row=4, columnspan=8, sticky='w')
+        self.imgobj = None
 
-    """ Get the Daily Stock Data from Alpha Vantage and then Organize """ 
+    """ Get the Daily Stock Data from Alpha Vantage and then Organize """
     """ this data into a Pandas Dataframe and Save that as self.df    """
     def get_series(self):
         # Check for missing stock symbol
@@ -214,7 +250,7 @@ class StockGUI:
             r"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY"
     
         # main_url variable store complete url 
-        main_url = base_url + "&symbol="+c_symbol+"&apikey="+self.api_key  
+        main_url = base_url + "&symbol="+c_symbol+'&outputsize=compact'+"&apikey="+self.api_key
         try:
             # get method of requests module returns response object  
             res_obj = requests.get(main_url) 
@@ -291,10 +327,10 @@ class StockGUI:
         gp = self.fig.add_subplot(1,1,1)
         gp.set_facecolor('maroon')
         gp.plot(self.df[graph], color='white')
-        
-        start_date = str(self.df.index[ 0].date())
+
+        start_date = str(self.df.index[0].date())
         end_date   = str(self.df.index[-1].date())
-        
+
         c_symbol   = self.symbol.get().upper() + \
                              " ("  + start_date + " to "  + end_date+")"
                              
