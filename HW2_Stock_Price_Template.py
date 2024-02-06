@@ -22,103 +22,90 @@ class StockGUI:
         # Create a Frame Inside Canvas with 5 pixel padding all around
         self.mainframe = ttk.Frame(self.guiWin_, padding="5 5 5 5")
         self.mainframe.grid(column=0, row=0, sticky=('n', 'w', 'e', 's'))
-
+        col2wdt = 12
         # Add Label Widgets to mainframe
-        ttk.Label(self.mainframe, text="Symbol").grid(column=0,row=0, sticky='w')
-        col2wdt = 10
+        ttk.Label(self.mainframe, text="Symbol", width=col2wdt, font=("Arial", 15, "bold")).grid(column=0,row=0, sticky='w')
+
         # Add Entry Widget for Entering the Stock Symbol
         self.symbol = tk.StringVar()
-        self.symbol_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.symbol, font=("Arial", 15, "bold"))
+        self.symbol_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.symbol, font=("Arial", 15, "bold"), foreground='maroon')
         self.symbol_entry.grid(column=1, row=0, sticky=('w', 'e'))
 
         # Add Entry Widget for Entering the Closing Price
-        ttk.Label(self.mainframe, text="Close Price").grid(column=0,row=1, sticky='w')
+        ttk.Label(self.mainframe, text="Close Price (USD)", font=("Arial", 12, "bold")).grid(column=0,row=1, sticky='w')
         self.close_price = tk.StringVar()
-        self.close_price_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.close_price, font=("Arial", 12, "bold"))
+        self.close_price_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.close_price, font=("Arial", 12, "bold"),foreground='maroon')
         self.close_price_entry.grid(column=1, row=1, sticky=('w', 'e'))
 
         # Add Entry Widget for Entering the Previous Close
-        ttk.Label(self.mainframe, text="Previous Close").grid(column=0,row=2, sticky='w')
+        ttk.Label(self.mainframe, text="Previous Close (USD)", font=("Arial", 12, "bold")).grid(column=0,row=2, sticky='w')
         self.p_close_price = tk.StringVar()
-        self.p_close_price_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.p_close_price, font=("Arial", 12, "bold"))
+        self.p_close_price_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.p_close_price, font=("Arial", 12, "bold"), foreground='maroon')
         self.p_close_price_entry.grid(column=1, row=2, sticky=('w', 'e'))
 
         # Add Entry Widget for Entering the Percent Change
-        ttk.Label(self.mainframe, text="Percent Change").grid(column=0,row=3, sticky='w')
+        ttk.Label(self.mainframe, text="Percent Change", font=("Arial", 12, "bold")).grid(column=0,row=3, sticky='w')
         self.change = tk.StringVar()
-        self.change_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.change, font=("Arial", 12, "bold"))
+        self.change_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.change, font=("Arial", 12, "bold"), foreground='maroon')
         self.change_entry.grid(column=1, row=3, sticky=('w', 'e'))
 
         # Add Entry Widget for Entering the Volume
 
-        ttk.Label(self.mainframe, text="Volume").grid(column=0,row=4, sticky='w')
+        ttk.Label(self.mainframe, text="Volume", font=("Arial", 12, "bold")).grid(column=0,row=4, sticky='w')
         self.vol = tk.StringVar()
-        self.vol_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.vol, font=("Arial", 12, "bold"))
+        self.vol_entry = ttk.Entry(self.mainframe, width=col2wdt, justify='center', textvariable=self.vol, font=("Arial", 12, "bold"), foreground='maroon')
         self.vol_entry.grid(column=1, row=4, sticky=('w', 'e'))
 
 
         # Add Button Widget for Calling stock_close() to Display Quote 
-        ttk.Button(self.mainframe, text="Price", cursor="hand2", width=8, command=self.stock_close).grid(column=1, row=5, sticky=('w','e'))
+        tk.Button(self.mainframe, text="Price", fg='maroon', cursor="hand2", width=8, font=("Arial", 14, 'bold'), command=self.stock_close).grid(column=1, row=5, sticky=('w','e'))
 
-        ttk.Separator(self.mainframe, orient='horizontal').\
-                             grid(column=0, row=6, columnspan=4, sticky="EW")
+
+        ttk.Separator(self.mainframe, orient='horizontal').grid(column=0, row=6, columnspan=4, sticky=('w','e'))
  
-        ttk.Label(self.mainframe,text="Last 100 Days").grid(column=0, row=7, sticky='w')
+        ttk.Label(self.mainframe, text="Last 100 Days", font=("Arial", 12, "bold")).grid(column=0, row=7, sticky='w')
         self.ac = tk.IntVar()
         self.ac.set(0)
-        self.ac1 = ttk.Checkbutton(self.mainframe, text="Adjusted Close", 
-                                  variable=self.ac, command=self.plt_ac, 
-                                  onvalue=1, offvalue=0). \
+        self.ac1 = tk.Checkbutton(self.mainframe, text="Adjusted Close", variable=self.ac, command=self.plt_ac, onvalue=1, offvalue=0, foreground='maroon', font=("Arial", 12, 'bold')). \
                                   grid(column=1, row=7, sticky='w')
-
-
 
         self.c = tk.IntVar()
         self.c.set(0)
-        self.c1 = ttk.Checkbutton(self.mainframe, text="Closing Price",
-                                  variable=self.c, command=self.plt_close,
-                                  onvalue=1, offvalue=0). \
+        self.c1 = tk.Checkbutton(self.mainframe, text="Closing Price", variable=self.c, command=self.plt_close, onvalue=1, offvalue=0, foreground='maroon', font=("Arial", 12, 'bold')). \
                                   grid(column=2, row=7, sticky='w')
 
         self.v = tk.IntVar()
         self.v.set(0)
-        self.v1 = ttk.Checkbutton(self.mainframe, text="Volume",
-                                  variable=self.v, command=self.plt_vol,
-                                  onvalue=1, offvalue=0). \
+        self.v1 = tk.Checkbutton(self.mainframe, text="Volume", variable=self.v, command=self.plt_vol, onvalue=1, offvalue=0, foreground='maroon', font=("Arial", 12, 'bold')). \
                                   grid(column=3, row=7, sticky='w')
 
 
-
-
-        self.imgwin = ttk.Label(self.mainframe, image="").grid(column=0, 
-                                            row=8, columnspan=4, sticky='w')
+        self.imgwin = ttk.Label(self.mainframe, image="").grid(column=0, row=8, columnspan=4, sticky='w')
         
         #Create Frame for Checkbuttons on Right Side
-        self.stock_frame = ttk.Frame(self.mainframe, padding=(50, 5, 5, 5),
-                                      relief='sunken', borderwidth=5)
-        self.stock_frame.grid(column=2, columnspan=2, row=0, rowspan=6, 
-                                      sticky=('n', 'w', 'e', 's'))
+        self.stock_frame = ttk.Frame(self.mainframe, padding=(50, 5, 5, 5), relief='sunken', borderwidth=5)
+        self.stock_frame.grid(column=2, columnspan=2, row=0, rowspan=6, sticky=('n', 'w', 'e', 's'))
 
 
         self.s1 = tk.IntVar()
         self.s1.set(0)
-        self.sc1 = ttk.Checkbutton(self.stock_frame, text="FORD", variable=self.s1, command=self.stock1, onvalue=1, offvalue=0).\
+        self.sc1 = tk.Checkbutton(self.stock_frame, text="FORD", variable=self.s1, command=self.stock1, onvalue=1, offvalue=0, foreground='maroon', font=("Arial", 12, 'bold')).\
                                   grid(column=0, row=1, sticky='w')
 
         self.s2 = tk.IntVar()
         self.s2.set(0)
-        self.sc2 = ttk.Checkbutton(self.stock_frame, text="GM", variable=self.s2, command=self.stock2, onvalue=1, offvalue=0).\
+        self.sc2 = tk.Checkbutton(self.stock_frame, text="GM", variable=self.s2, command=self.stock2, onvalue=1, offvalue=0, foreground='maroon', font=("Arial", 12, 'bold')).\
                                   grid(column=0, row=2, sticky='w')
 
         self.s3 = tk.IntVar()
         self.s3.set(0)
-        self.sc3 = ttk.Checkbutton(self.stock_frame, text="STELLANTIS", variable=self.s3, command=self.stock3, onvalue=1, offvalue=0).\
+        self.sc3 = tk.Checkbutton(self.stock_frame, text="STELLANTIS", variable=self.s3, command=self.stock3, onvalue=1, offvalue=0, foreground='maroon', font=("Arial", 12, 'bold')).\
                                   grid(column=0, row=3, sticky='w')
 
 
         self.s4 = tk.IntVar()
         self.s4.set(0)
-        self.sc4 = ttk.Checkbutton(self.stock_frame, text="TESLA", variable=self.s4, command=self.stock4, onvalue=1, offvalue=0).\
+        self.sc4 = tk.Checkbutton(self.stock_frame, text="TESLA", variable=self.s4, command=self.stock4, onvalue=1, offvalue=0, foreground='maroon', font=("Arial", 12, 'bold')).\
                                   grid(column=0, row=4, sticky='w')
 
         self.stocks = ['F', 'GM', 'STLA', 'TSLA']
